@@ -22,7 +22,7 @@ The dataset contains student-level information such as:
 4. How does AI usage relate to skill retention score?
 
 ## Dashboard Preview
-![Dashboard Preview](dashboard/AI Usage and Academic Performance Analysis.jpg)
+![Dashboard Preview](dashboard/dashboard_page.jpg)
 
 ## Key Insights
 - STEM has the highest average AI usage.
