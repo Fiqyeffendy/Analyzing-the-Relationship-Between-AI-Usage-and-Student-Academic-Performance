@@ -7,32 +7,32 @@
 -- 1. Data Understanding
 -- =========================================================
 
--- cek semua data
+-- Check all the data
 SELECT * FROM dampak_ai;
 
--- cek struktur kolom dan tipe data
+-- Check the column structure and data types
 SELECT column_name, data_type
 FROM information_schema.columns
 WHERE table_name = 'dampak_ai'
 ORDER BY ordinal_position;
 
--- cek total data
+-- check total data
 SELECT COUNT(*) AS total_students
 FROM dampak_ai;
 
--- cek nilai unik major_category
+-- Check the unique value of major_category
 SELECT DISTINCT major_category FROM dampak_ai
 ORDER BY major_category;
 
--- cek nilai unik year_of_study
+-- Check the unique value of year_of_study
 SELECT DISTINCT year_of_study FROM dampak_ai
 ORDER BY year_of_study;
 
--- cek nilai unik primary_use_case
+-- Check the unique value of primary_use_case
 SELECT DISTINCT primary_use_case FROM dampak_ai
 ORDER BY primary_use_case;
 
--- cek nilai unik burnout_risk_level
+-- Check the unique value of burnout_risk_level
 SELECT DISTINCT burnout_risk_level FROM dampak_ai
 ORDER BY burnout_risk_level;
 
@@ -75,7 +75,7 @@ USING skill_retention_score::NUMERIC;
 -- 3. Data Quality Check
 -- =========================================================
 
--- cek missing value pada kolom penting
+-- Check for missing values in key columns
 SELECT 
     COUNT(*) - COUNT(student_id) AS missing_student_id,
     COUNT(*) - COUNT(major_category) AS missing_major_category,
@@ -89,12 +89,12 @@ SELECT
     COUNT(*) - COUNT(burnout_risk_level) AS missing_burnout
 FROM dampak_ai;
 
--- cek duplikat berdasarkan student_id
+-- Check for duplicates based on student_id
 SELECT student_id, COUNT(*) AS total_duplicate
 FROM dampak_ai GROUP BY student_id
 HAVING COUNT(*) > 1;
 
--- cek rentang nilai GPA
+-- Check the GPA range
 SELECT 
     MIN(pre_semester_gpa) AS min_pre_gpa,
     MAX(pre_semester_gpa) AS max_pre_gpa,
@@ -102,7 +102,7 @@ SELECT
     MAX(post_semester_gpa) AS max_post_gpa
 FROM dampak_ai;
 
--- cek GPA tidak wajar
+-- Check for an unusual GPA
 SELECT *
 FROM dampak_ai
 WHERE pre_semester_gpa < 0
@@ -110,14 +110,14 @@ WHERE pre_semester_gpa < 0
    OR post_semester_gpa < 0
    OR post_semester_gpa > 4;
 
--- cek rentang penggunaan AI
+-- Check the range of AI applications
 SELECT 
     MIN(weekly_genai_hours) AS min_ai_hours,
     MAX(weekly_genai_hours) AS max_ai_hours,
     ROUND(AVG(weekly_genai_hours), 2) AS avg_ai_hours
 FROM dampak_ai;
 
--- cek nilai penggunaan AI yang tidak wajar
+-- Check for unusual AI usage
 SELECT *
 FROM dampak_ai
 WHERE weekly_genai_hours < 0;
@@ -137,13 +137,13 @@ FROM dampak_ai;
 -- 5. Analysis Questions
 -- =========================================================
 
--- Q1. Bidang studi mana yang memiliki rata-rata penggunaan AI tertinggi?
+-- Q1. Which field of study has the highest average use of AI?
 SELECT major_category, 
 ROUND(AVG(weekly_genai_hours), 2) AS avg_weekly_genai_hours
 FROM dampak_ai GROUP BY major_category
 ORDER BY avg_weekly_genai_hours DESC;
 
--- Q2. Bagaimana rata-rata kenaikan GPA berdasarkan major category?
+-- Q2. What is the average GPA increase by major category?
 SELECT major_category,
     ROUND(AVG(weekly_genai_hours), 2) AS avg_weekly_genai_hours,
     ROUND(AVG(pre_semester_gpa), 3) AS avg_pre_semester_gpa,
@@ -153,7 +153,7 @@ FROM dampak_ai GROUP BY major_category
 ORDER BY avg_gpa_change DESC;
 
 
--- Q3. Apakah penggunaan AI yang lebih tinggi berkaitan dengan ketergantungan AI?
+-- Q3. Is greater use of AI associated with AI dependency?
 SELECT 
     CASE 
         WHEN weekly_genai_hours < 5 THEN 'Low Usage'
@@ -173,7 +173,7 @@ GROUP BY
 ORDER BY avg_weekly_genai_hours;
 
 
--- Q4. Bagaimana hubungan penggunaan AI dengan skill retention score?
+-- Q4. How is the use of AI related to the skill retention score?
 SELECT 
     CASE 
         WHEN weekly_genai_hours < 5 THEN 'Low Usage'
